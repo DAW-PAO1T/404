@@ -44,6 +44,11 @@
     'Liberation Mono', 'Courier New', monospace;
 }
 
+/* Adicionales */
+.mt-10{
+  margin-top: 8rem;
+}
+
 *,
 *::before,
 *::after {
