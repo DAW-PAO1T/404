@@ -54,3 +54,115 @@
     // Collapse the navbar when page is scrolled
     $(window).scroll(navbarCollapse);
 })(jQuery); // End of use strict
+
+
+
+
+/// Frases de motivacion
+
+var pon_frase_en_span = function (data) {
+
+    frase = data['parse']['text']['*'];
+    frase = frase.replace(/\/wiki\//g, "http://es.wikiquote.org/wiki/")
+
+    let parser = new DOMParser();
+    let xml = parser.parseFromString(frase, "text/xml");
+    let tagFrase = xml.getElementsByTagName('td')
+    document.getElementById ('frase').innerHTML =tagFrase[2].textContent;
+    //document.getElementById ('autor').innerHTML =tagFrase[4].textContent;
+    console.log(tagFrase[4].textContent)
+    let wikiAutor = tagFrase[4].textContent;
+    var otraStr = wikiAutor.replace(/([a-z])([A-Z])/g, '$1 - $2');
+    let f1 = otraStr.split(' - ')[0]
+    let f2 = otraStr.split(' - ')[1]
+    consoleText(['Autor: ', f1, f2], 'autor',['tomato','rebeccapurple','blue']);
+    console.log(tagFrase[4].textContent)
+};
+
+var dame_frase_wikiquote = function () {
+    var now = new Date ();
+    var day = now.getDay();
+    if(day == 0) titulo='{{Plantilla:Frase-domingo}}';
+    if(day == 1) titulo='{{Plantilla:Frase-lunes}}';
+    if(day == 2) titulo='{{Plantilla:Frase-martes}}';
+    if(day == 3) titulo='{{Plantilla:Frase-miércoles}}';
+    if(day == 4) titulo='{{Plantilla:Frase-jueves}}';
+    if(day == 5) titulo='{{Plantilla:Frase-viernes}}';
+    if(day == 6) titulo='{{Plantilla:Frase-sábado}}';
+
+    url = 'http://es.wikiquote.org/w/api.php?action=parse&text='+titulo+'&format=json&callback=pon_frase_en_span';
+    var elem = document.createElement ('script');
+    elem.setAttribute ('src', url);
+    elem.setAttribute ('type','text/javascript');
+    document.getElementsByTagName ('head') [0].appendChild (elem);
+};
+
+
+function modalEvent() {
+    const modal = document.querySelector(`[data-modal=trigger-demo]`);
+    const contentWrapper = modal.querySelector('.content-wrapper');
+    const close = modal.querySelector('.close');
+
+    close.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', () => modal.classList.remove('open'));
+    document.getElementById("botonModalOk").addEventListener('click', () => modal.classList.remove('open'));
+    contentWrapper.addEventListener('click', (e) => e.stopPropagation());
+
+    modal.classList.toggle('open');
+}
+
+function cargarModal() {
+    dame_frase_wikiquote();
+    modalEvent()
+}
+
+
+
+function consoleText(words, id, colors) {
+    if (colors === undefined) colors = ['#fff'];
+    var visible = true;
+    var con = document.getElementById('console');
+    var letterCount = 1;
+    var x = 1;
+    var waiting = false;
+    var target = document.getElementById(id)
+    target.setAttribute('style', 'color:' + colors[0])
+    window.setInterval(function() {
+
+        if (letterCount === 0 && waiting === false) {
+            waiting = true;
+            target.innerHTML = words[0].substring(0, letterCount)
+            window.setTimeout(function() {
+                var usedColor = colors.shift();
+                colors.push(usedColor);
+                var usedWord = words.shift();
+                words.push(usedWord);
+                x = 1;
+                target.setAttribute('style', 'color:' + colors[0])
+                letterCount += x;
+                waiting = false;
+            }, 1000)
+        } else if (letterCount === words[0].length + 1 && waiting === false) {
+            waiting = true;
+            window.setTimeout(function() {
+                x = -1;
+                letterCount += x;
+                waiting = false;
+            }, 1000)
+        } else if (waiting === false) {
+            target.innerHTML = words[0].substring(0, letterCount)
+            letterCount += x;
+        }
+    }, 120)
+    window.setInterval(function() {
+        if (visible === true) {
+            con.className = 'console-underscore hidden'
+            visible = false;
+
+        } else {
+            con.className = 'console-underscore'
+
+            visible = true;
+        }
+    }, 400)
+}

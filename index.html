@@ -40,7 +40,30 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
   </head>
-  <body id="page-top">
+  <body id="page-top" onload="cargarModal();">
+
+
+    <div data-modal="trigger-demo" class="modal">
+      <article class="content-wrapper">
+        <button class="close"></button>
+        <header class="modal-header">
+          <h2>Frase del día</h2>
+        </header>
+        <div class="content">
+          <p id="frase"></p>
+        </div>
+        <div class="content">
+          <p id="autor"></p>
+          <div class='console-underscore' id='console'>&#95;</div>
+        </div>
+
+        <footer class="modal-footer">
+          <button id="botonModalOk">Ok</button>
+        </footer>
+      </article>
+    </div>
+
+
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
@@ -89,11 +112,9 @@
         <div class="masthead-subheading">
           ¿Listo para lograr tus metas?
         </div>
-        <a
-          class="btn btn-primary btn-xl text-uppercase text-dark js-scroll-trigger"
-          href="#services"
-          >Cómo funciona</a
-        >
+        <a class="btn btn-primary btn-xl text-uppercase text-dark js-scroll-trigger"
+          href="#services">Cómo funciona
+        </a>
       </div>
     </header>
     <!-- Services-->
